@@ -18,11 +18,14 @@ const Head = () => {
           alt="menu"
           src="https://banner2.cleanpng.com/20180515/bge/kisspng-hamburger-button-computer-icons-menu-5afb7b715df0c9.7709813315264305773848.jpg"
         />
-        <img
-          className="h-8 mx-2 cursor-pointer"
-          alt="Logo"
-          src="https://logodownload.org/wp-content/uploads/2014/10/youtube-logo-2-3.png"
-        />
+
+        <a href="/">
+          <img
+            className="h-8 mx-2 cursor-pointer"
+            alt="Logo"
+            src="https://logodownload.org/wp-content/uploads/2014/10/youtube-logo-2-3.png"
+          />
+        </a>
       </div>
       <div className="col-span-10 text-center flex">
         <input

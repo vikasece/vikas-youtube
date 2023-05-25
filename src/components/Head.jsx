@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
+import { YOUTUBE_AUTO_SUGGESTION_API } from "../utils/constants";
 
 const Head = () => {
+  const [searchQuery, setSearchQuery] = useState();
+  const [list, setList] = useState([]);
+  const [showSuggestion, setShowSuggestion] = useState(false);
   const dispatch = useDispatch();
 
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => geSearchSuggestions(), 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchQuery]);
+
+  const geSearchSuggestions = async () => {
+    const data = await fetch(YOUTUBE_AUTO_SUGGESTION_API + searchQuery);
+    const json = await data.json();
+    console.log("dd", json);
+    console.log(setList(json[1]));
   };
 
   return (
@@ -27,18 +46,37 @@ const Head = () => {
           />
         </a>
       </div>
-      <div className="col-span-10 text-center flex">
-        <input
-          tye="text"
-          className="w-1/2 border border-gray-400 p-2  rounded-l-full"
-        />
-        <button className="border border-gray-400 p-2 rounded-r-full border-l-0 py-2 px-5">
-          <img
-            src="https://www.citypng.com/public/uploads/preview/download-blue-search-icon-button-png-11640084027s0fkuhz2lb.png"
-            alt="search"
-            className="h-6"
+      <div className="col-span-10 px-10 relative">
+        <div className="flex ">
+          <input
+            tye="text"
+            className="w-1/2 border border-gray-400 p-2  rounded-l-full px-3"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onBlur={() => setShowSuggestion(false)}
+            onFocus={() => setShowSuggestion(true)}
           />
-        </button>
+
+          <button className="border border-gray-400 p-2 rounded-r-full border-l-0 py-2 px-5">
+            <img
+              src="https://www.citypng.com/public/uploads/preview/download-blue-search-icon-button-png-11640084027s0fkuhz2lb.png"
+              alt="search"
+              className="h-6"
+            />
+          </button>
+        </div>
+        {showSuggestion && (
+          <div className="px-2 absolute w-[37rem] bg-white  shadow-md py-2 ">
+            <ul className="rounded-lg">
+              {list &&
+                list.map((item) => (
+                  <li className="hover:bg-gray-100 p-2" key={item.id}>
+                    {item}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
       </div>
       <div className=" col-span-1">
         <img

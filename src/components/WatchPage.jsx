@@ -7,34 +7,35 @@ const WatchPage = () => {
   const [searchParms] = useSearchParams();
   const [video, setVideo] = useState("");
 
+  useEffect(() => {
+    dispatch(closeMenu());
+    getVideo();
+  }, []);
+
   const getVideo = async () => {
     let data = await fetch(
       `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${searchParms.get(
         "v"
-      )}&key=AIzaSyCmaHFyRVRDxruK0ftX1UQaIdqlmqIrawg`
+      )}&key=AIzaSyAzAVr3QmpNphEf54gcnFjI-jlEA2jFJIk`
     );
     let json = await data.json();
-    console.log(json);
-    setVideo(json.items);
+    setVideo(json.items[0]);
   };
 
-  useEffect(() => {
-    dispatch(closeMenu());
-    getVideo();
-  }, [video]);
+  const { snippet } = video;
 
   return (
     <div>
-      {/* <iframe
+      <iframe
         className="px-2"
         width="1000"
         height="700"
-        // src={video.item.}
+        src={"https://www.youtube.com/embed/" + searchParms.get("v")}
         title="YouTube video player"
-        frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe> */}
+        allowFullScreen
+      ></iframe>
+      <p>{snippet && snippet.title}</p>
     </div>
   );
 };

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { closeMenu } from "../utils/appSlice";
 import { useSearchParams } from "react-router-dom";
+import Comments from "./Comments";
 const WatchPage = () => {
   const dispatch = useDispatch();
   const [searchParms] = useSearchParams();
   const [video, setVideo] = useState("");
 
   useEffect(() => {
-    dispatch(closeMenu());
+    dispatch(closeMenu(true));
     getVideo();
   }, []);
 
@@ -25,17 +26,20 @@ const WatchPage = () => {
   const { snippet } = video;
 
   return (
-    <div>
-      <iframe
-        className="px-2"
-        width="1000"
-        height="700"
-        src={"https://www.youtube.com/embed/" + searchParms.get("v")}
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowFullScreen
-      ></iframe>
-      <p>{snippet && snippet.title}</p>
+    <div className="flex-column">
+      <div>
+        <iframe
+          className="px-2"
+          width="1000"
+          height="700"
+          src={"https://www.youtube.com/embed/" + searchParms.get("v")}
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        ></iframe>
+        <p>{snippet && snippet.title}</p>
+      </div>
+      <Comments />
     </div>
   );
 };

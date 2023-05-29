@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 import { YOUTUBE_AUTO_SUGGESTION_API } from "../utils/constants";
+import { cacheResults } from "../utils/searchSlice";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState();
-  const [list, setList] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
   const [showSuggestion, setShowSuggestion] = useState(false);
+  const searchCache = useSelector((store) => store.search);
   const dispatch = useDispatch();
 
   const toggleMenuHandler = () => {
@@ -14,7 +16,13 @@ const Head = () => {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => geSearchSuggestions(), 200);
+    const timer = setTimeout(() => {
+      if (searchCache[searchQuery]) {
+        setSuggestions(searchCache[searchQuery]);
+      } else {
+        geSearchSuggestions();
+      }
+    }, 200);
 
     return () => {
       clearTimeout(timer);
@@ -22,10 +30,15 @@ const Head = () => {
   }, [searchQuery]);
 
   const geSearchSuggestions = async () => {
+    console.log("Iam Calling API");
     const data = await fetch(YOUTUBE_AUTO_SUGGESTION_API + searchQuery);
     const json = await data.json();
-    console.log("dd", json);
-    console.log(setList(json[1]));
+    setSuggestions(json[1]);
+    dispatch(
+      cacheResults({
+        [searchQuery]: json[1],
+      })
+    );
   };
 
   return (
@@ -68,8 +81,8 @@ const Head = () => {
         {showSuggestion && (
           <div className="px-2 absolute w-[37rem] bg-white  shadow-md py-2 ">
             <ul className="rounded-lg">
-              {list &&
-                list.map((item) => (
+              {suggestions &&
+                suggestions.map((item) => (
                   <li className="hover:bg-gray-100 p-2" key={item.id}>
                     {item}
                   </li>

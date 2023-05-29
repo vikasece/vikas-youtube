@@ -1,7 +1,7 @@
 import React from "react";
 
 const Comment = ({ data }) => {
-  const { name, text, replies } = data;
+  const { name, text } = data;
   return (
     <div className="ml-2 flex bg-gray-50 p-2 my-2">
       <div className="text-1l font-bold flex ">
@@ -21,7 +21,12 @@ const Comment = ({ data }) => {
 
 const CommentList = ({ comments }) => {
   return comments.map((comment, index) => (
-    <Comment key={index} data={comment} />
+    <div key={index}>
+      <Comment data={comment} />
+      <div className="pl-5 ml-5 border-l-2">
+        <CommentList comments={comment.replies} />
+      </div>
+    </div>
   ));
 };
 
@@ -43,7 +48,13 @@ const CommentsContainer = () => {
             {
               name: "Vikas",
               text: "3rd level data",
-              replies: [],
+              replies: [
+                {
+                  name: "Pavan Kumar",
+                  text: "Anekal 4th level",
+                  replies: [],
+                },
+              ],
             },
           ],
         },

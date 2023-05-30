@@ -78,10 +78,12 @@ const Head = () => {
             />
           </button>
         </div>
+
         {showSuggestion && (
           <div className="px-2 absolute w-[37rem] bg-white  shadow-md py-2 ">
             <ul className="rounded-lg">
               {suggestions &&
+                !suggestions.includes("undefined") &&
                 suggestions.map((item) => (
                   <li className="hover:bg-gray-100 p-2" key={item.id}>
                     {item}

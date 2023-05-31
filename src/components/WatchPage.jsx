@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { closeMenu } from "../utils/appSlice";
 import { useSearchParams } from "react-router-dom";
 import Comments from "./Comments";
+import LiveChat from "./LiveChat";
 const WatchPage = () => {
   const dispatch = useDispatch();
   const [searchParms] = useSearchParams();
@@ -26,8 +27,8 @@ const WatchPage = () => {
   const { snippet } = video;
 
   return (
-    <div className="flex-column">
-      <div>
+    <div className="flex-column w-full">
+      <div className="px-5 flex">
         <iframe
           className="px-2"
           width="1000"
@@ -37,7 +38,10 @@ const WatchPage = () => {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         ></iframe>
-        <p>{snippet && snippet.title}</p>
+        {/* <p>{snippet && snippet.title}</p> */}
+        <div className="bg-gray-100 w-96">
+          <LiveChat />
+        </div>
       </div>
       <Comments />
     </div>

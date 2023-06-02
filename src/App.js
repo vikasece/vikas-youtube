@@ -6,6 +6,8 @@ import Head from "./components/Head";
 import store from "./utils/store";
 import MainContainer from "./components/MainContainer";
 import WatchPage from "./components/WatchPage";
+import Demo from "./components/Demo";
+import UseRefDemo from "./components/UseRefDemo";
 function App() {
   const appRouter = createBrowserRouter([
     {
@@ -19,6 +21,15 @@ function App() {
         {
           path: "watch",
           element: <WatchPage />,
+        },
+        {
+          path: "demo",
+          element: (
+            <>
+              <Demo />
+              <UseRefDemo />
+            </>
+          ),
         },
       ],
     },
